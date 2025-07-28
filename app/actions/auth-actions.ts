@@ -143,7 +143,7 @@ export async function getAvailableSlots(date: string) {
     });
 
     const bookedTimeSlots = bookedSlots
-      .map((slot) => slot.meetingTimeSlot)
+      .map((slot: { meetingTimeSlot: string }) => slot.meetingTimeSlot)
       .filter(Boolean);
 
     return {
