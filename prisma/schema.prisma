@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model RegisterUser {
+  id                 String          @id @default(cuid())
+  title              String
+  name               String
+  age                Int
+  phone              String          @unique
+  email              String          @unique
+  profileimage       ImageProfile?
+  size               String?
+  job                String?
+  activities         String?
+  traveldate         String?
+  activitiesworkshop String?         @db.VarChar(1600)
+  activitiesreason   String?         @db.VarChar(1600)
+  activitieimage     ImageActivity[]
+  // interviewtime      Interviewtime?
+  sessionId          Session?
+  meetings           Meeting?
+  status             String          @default("pending")
+  terms              Boolean         @default(false)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model ImageProfile {
+  id     String       @id @default(cuid())
+  url    String
+  user   RegisterUser @relation(fields: [userId], references: [id])
+  userId String       @unique
+}
+
+model ImageActivity {
+  id     String       @id @default(cuid())
+  url    String?
+  user   RegisterUser @relation(fields: [userId], references: [id])
+  userId String
+}
+
+// model Interviewtime {
+//   id              String       @id @default(cuid())
+//   userId          String       @unique
+//   time            DateTime?
+//   timeSlot        String? // ช่วงเวลา เช่น "09:00 - 09:10"
+//   meetingId       String? // Zoom Meeting ID
+//   meetingPassword String? // Zoom Password
+//   meetingLink     String? // Zoom Link
+//   queueNumber     Int? // หมายเลขคิว
+//   status          String       @default("confirmed") // สถานะการจอง
+//   createdAt       DateTime     @default(now())
+//   updatedAt       DateTime     @updatedAt
+//   user            RegisterUser @relation(fields: [userId], references: [id])
+
+//   @@unique([time, timeSlot]) // ป้องกันการจองซ้ำในเวลาเดียวกัน
+//   @@index([time])
+//   @@index([queueNumber])
+// }
+
+model Session {
+  id        String       @id @default(cuid())
+  userId    String       @unique
+  status    String       @default("inactive") // 'active', 'inactive'
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  user      RegisterUser @relation(fields: [userId], references: [id])
+}
+
+model AppUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String?  @default("USER")
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Meeting {
+  id               String       @id @default(uuid())
+  userId           String       @unique
+  meetingDate      DateTime
+  meetingTimeSlot  String // ช่วงเวลา เช่น "09:00 - 09:10"
+  durationMinutes  Int          @default(10)
+  zoomMeetingId    String?
+  zoomJoinUrl      String?
+  zoomPassword     String?
+  queueNumber      Int? // หมายเลขคิว
+  status           String       @default("scheduled") // สถานะการจอง
+  interviewerNotes String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
+  user             RegisterUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingDate, meetingTimeSlot]) // ป้องกันการจองซ้ำในเวลาเดียวกัน
+  @@index([meetingDate])
+  @@index([queueNumber])
+}
