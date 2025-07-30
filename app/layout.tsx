@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -7,26 +7,14 @@ import { Analytics } from "@vercel/analytics/next";
 
 import { Toaster } from "@/components/ui/sonner";
 
-const tatsanaChong = localFont({
-  src: [
-    {
-      path: "../fonts/TATSANA-CHON-LIG.woff",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../fonts/TATSANA-CHON-REG.woff",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../fonts/TATSANA-CHON-BLD.woff",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  display: "swap",
-  variable: "--font-tatsana-chong",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -41,7 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={tatsanaChong.className}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <SpeedInsights />
         <Analytics />
         {children}
