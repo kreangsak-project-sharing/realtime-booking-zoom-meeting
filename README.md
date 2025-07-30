@@ -39,4 +39,4 @@ meeting:delete:meeting:admin
 user:read:user:admin
 ```
 
-### socket.io not work on vercel
+### Noted: socket.io(server) not work on vercel
