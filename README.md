@@ -30,3 +30,11 @@ pnpm prisma generate
 pnpm prisma migrate dev
 pnpm run dev
 ```
+
+## ZoomMeeting Scopes
+```bash
+meeting:read:meeting:admin
+meeting:write:meeting:admin
+meeting:delete:meeting:admin
+user:read:user:admin
+```
