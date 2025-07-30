@@ -38,3 +38,5 @@ meeting:write:meeting:admin
 meeting:delete:meeting:admin
 user:read:user:admin
 ```
+
+### socket.io not work on vercel
